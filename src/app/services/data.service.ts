@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -6,10 +7,16 @@ import { Injectable } from '@angular/core';
 export class DataService {
   token:any;
   userLoggedIn:boolean;
-  userName:any;
+  usernameSubject =new Subject<string>();
+  usernameChanged$ = this.usernameSubject.asObservable();
+  username: string | undefined;
+
   constructor() {
     this.userLoggedIn= false;
-    this.userName= localStorage.getItem('name');
-   }
+    
+     }
+     changeUsername(newUsername: string) {
+      this.usernameSubject.next(newUsername);
+    }
    
 }

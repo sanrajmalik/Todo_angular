@@ -4,6 +4,7 @@ import { DataService } from '../../services/data.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { initFlowbite } from 'flowbite';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -15,9 +16,14 @@ import { initFlowbite } from 'flowbite';
 export class HeaderComponent implements OnInit {
   userLoggedin:any;
   userName: any;
+  usernameSubscription: Subscription;
   constructor(public dataservice:DataService, private authservice:AuthService){
     this.userLoggedin= this.dataservice.userLoggedIn;
-    this.userName = this.dataservice.userName;
+    this.usernameSubscription = this.dataservice.usernameChanged$.subscribe(
+      newUsername => {
+        this.userName = newUsername;
+      }
+    );
 
   }
   logout(){

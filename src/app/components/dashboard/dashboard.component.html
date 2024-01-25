@@ -35,7 +35,7 @@
                     <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">Choose status</h6>
                     <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
                         <li *ngFor="let status of statusOptions" class="flex items-center">
-                          <input id="{{ status }}" type="checkbox" (change)="toggleCheckbox(status)">
+                          <input id="{{ status }}" type="checkbox"  (change)="toggleCheckbox(status)">
                           <label for="{{ status }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">{{ status }}</label>
                         </li>
                       </ul>
@@ -99,7 +99,6 @@
                                                 <div>
                                                     <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
                                                     <select id="category"  [(ngModel)]="status" [ngModelOptions]="{standalone: true}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                        <option selected="" value="null">Select category</option>
                                                         <option value="To Do">To Do</option>
                                                         <option value="In Progress">In Progress</option>
                                                         <option value="Done">Done</option>
@@ -117,7 +116,7 @@
                                                     <textarea id="description" rows="4" [(ngModel)]="description" [ngModelOptions]="{standalone: true}" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Write product description here"></textarea>                    
                                                 </div>
                                             </div>
-                                            <button (click)="updateTask(a)" data-modal-toggle="createModal"class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                            <button (click)="updateTask(a)" data-modal-toggle="updateModal" [disabled]="title=='' || status==''" class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                                                 <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor"  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                                                 Update task
                                             </button>
@@ -203,24 +202,25 @@
                 <div class="grid gap-4 mb-4 sm:grid-cols-2">
                     <div>
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
-                        <input type="text" name="title" id="title"  [(ngModel)]="title" [ngModelOptions]="{standalone: true}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type title" required="">
+                        <input type="text" name="title" id="title"  [(ngModel)]="title" [ngModelOptions]="{standalone: true}" (focusout)="checkTitle()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type title" required="">
+                        <p *ngIf="titleCheck" class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">Title is mandatory </span></p>
+
                     </div>
                    
                     <div>
                         <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                        <select id="category"  [(ngModel)]="status" [ngModelOptions]="{standalone: true}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option selected="" value="null">Select category</option>
+                        <select id="category"  [(ngModel)]="status" [ngModelOptions]="{standalone: true}" (change)="checkStatus()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            <option selected="" value="null">Select status</option>
                             <option value="To Do">To Do</option>
                             <option value="In Progress">In Progress</option>
                             <option value="Done">Done</option>
                         </select>
+                        <p *ngIf="statuschecked" class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">Status is mandatory</span> </p>
+
                     </div>
                     <div>
                         <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Due Date</label>
-                        <span class="p-float-label">
-                            <p-calendar [(ngModel)]="dueDate"  [ngModelOptions]="{standalone: true}" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
-                            <label for="birth_date">Due Date</label>
-                        </span>
+                            <p-calendar placeholder="Due Date" [(ngModel)]="dueDate"  [ngModelOptions]="{standalone: true}" [iconDisplay]="'input'" [showIcon]="true"></p-calendar>
                     </div>
                     
 
@@ -230,7 +230,7 @@
                         <textarea id="description" rows="4" [(ngModel)]="description" [ngModelOptions]="{standalone: true}" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Write product description here"></textarea>                    
                     </div>
                 </div>
-                <button (click)="createTask()" data-modal-toggle="createModal" class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                <button (click)="createTask()" [disabled]="title!='' || status!=''" data-modal-toggle="createModal" class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                     <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor"  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                     Add new task
                 </button>
@@ -239,7 +239,3 @@
     </div>
 </div>
 
-<!-- update modal -->
-
-
-<!-- Main modal -->

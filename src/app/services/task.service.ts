@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DataService } from './data.service';
 import { Router } from '@angular/router';
+import { environment } from '../env/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
-  public apiURL = 'http://192.168.1.17:3000'
+  private apiURL = environment.apiUrl;
   constructor(private httpclient:HttpClient,private dataservice:DataService,private router:Router) { }
 
   getTasks(){

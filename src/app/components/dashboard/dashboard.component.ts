@@ -15,9 +15,11 @@ import { UpdateModalComponent } from '../modal/update-modal/update-modal.compone
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
-  title:any;
-  description:any;
-  status:any=null;
+  title:any='';
+  titleCheck:boolean=false;
+  description:any='';
+  status:any='';
+  statuschecked:boolean=false;
   dueDate:Date  | undefined;
   tasks:any;
   searchtext:any;
@@ -26,6 +28,8 @@ export class DashboardComponent implements OnInit {
   selectedStatuses: string[] = ['All'];
   showModal = false;
   taskId: string | undefined; 
+  statusCheckBox: boolean = false; // Initialize with the desired default value
+
 
   constructor(private taskservice:TaskService, private authservice:AuthService, private cdr: ChangeDetectorRef){
     
@@ -67,13 +71,15 @@ export class DashboardComponent implements OnInit {
       status:this.status,
       dueDate:this.dueDate,
     }
-    this.taskservice.createTask(data).subscribe((res)=>{
-    this.clearFields();
-    },err=>{
-      if(err.message.contains("expired")){
-        this.authservice.logout();
-      }
-    })
+    if(this.statuschecked==true && this.titleCheck==true){
+      this.taskservice.createTask(data).subscribe((res)=>{
+        this.clearFields();
+        },err=>{
+          if(err.message.contains("expired")){
+            this.authservice.logout();
+          }
+        })
+    }
   }
 
   deleteTask(data:any){
@@ -159,5 +165,27 @@ export class DashboardComponent implements OnInit {
 
   closeModal() {
     this.showModal = false;
+  }
+
+  changeCheckbox() {
+    // Do any manipulation or update here
+    this.status = !this.status; // Toggle the status for example
+  }
+
+  checkTitle(){
+    if(!this.title){
+      this.titleCheck=true;
+    }
+    else{
+      this.titleCheck=false;
+    }
+  }
+  checkStatus(){
+    if(!this.status || this.status=="null"){
+      this.statuschecked=true;
+    }
+    else{
+      this.statuschecked=false;
+    }
   }
 }

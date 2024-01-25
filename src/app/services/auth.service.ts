@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DataService } from './data.service';
 import { Router } from '@angular/router';
+import { environment } from '../env/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  public apiURL = 'http://192.168.1.17:3000'
+  public apiURL = environment.apiUrl;
   constructor(private httpclient:HttpClient,private dataservice:DataService,private router:Router) { }
 
   login(email:string, password:string): Observable<any> {
@@ -22,7 +23,9 @@ export class AuthService {
 
   logout(){
     localStorage.removeItem('token');
+    localStorage.removeItem('name');
     localStorage.setItem('userLoggedIn', "false");
+    this.dataservice.changeUsername('');
     this.dataservice.userLoggedIn=false;
     this.router.navigateByUrl('/login')
   }

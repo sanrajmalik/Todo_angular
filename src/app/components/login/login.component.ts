@@ -4,13 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,RouterLink, RouterLinkActive,],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -28,7 +28,7 @@ export class LoginComponent {
       localStorage.setItem('userLoggedIn', "true");
       this.dataService.token=res.token;
       this.dataService.userLoggedIn=true;
-      this.dataService.userName=res.userName
+      this.dataService.changeUsername(res.userName);
       localStorage.setItem('name',res.userName);
       ;
       this.router.navigateByUrl('/dashboard');
