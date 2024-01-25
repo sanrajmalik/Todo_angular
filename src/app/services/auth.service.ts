@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  public apiURL = 'http://localhost:3000'
+  public apiURL = 'http://192.168.1.17:3000'
   constructor(private httpclient:HttpClient,private dataservice:DataService,private router:Router) { }
 
   login(email:string, password:string): Observable<any> {
@@ -16,8 +16,7 @@ export class AuthService {
     return this.httpclient.post<any>(this.apiURL+'/auth/login', data);
   }
 
-  register(name:string,email:string, password:string): Observable<any> {
-    const data ={name:name,email: email, password: password}
+  register(data:object): Observable<any> {
     return this.httpclient.post<any>(this.apiURL+'/auth/register', data);
   }
 

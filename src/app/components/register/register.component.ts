@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { DataService } from '../../services/data.service';
+import { AuthService } from '../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -12,4 +15,39 @@ import { RouterOutlet } from '@angular/router';
 })
 export class RegisterComponent {
 
+  name:string='';
+  password:string='';
+  email:string='';
+  fieldsEmpty:boolean=false;
+
+  constructor(private authService: AuthService, private toast:ToastrService, private router:Router,private dataService:DataService){
+
+  }
+
+  registerUser(){
+    const data={
+      name:this.name,
+      email:this.email,
+      password:this.password
+    }
+    this.authService.register(data).subscribe((res)=>{
+      console.log("User registration successful");
+      localStorage.setItem('token',res.token);
+      localStorage.setItem('userLoggedIn', "true");
+      this.dataService.token=res.token;
+      this.dataService.userLoggedIn=true;
+      this.dataService.userName=res.userName;
+      this.router.navigateByUrl('/dashboard');
+    },err=>{
+      console.log("User registration failed");
+    })
+  }
+  changeField(){
+    if(this.name && this.email && this.password){
+      this.fieldsEmpty=true;
+    }
+    else{
+      this.fieldsEmpty=false;
+    }
+  }
 }

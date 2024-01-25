@@ -9,6 +9,7 @@ export class DataService {
   userName:any;
   constructor() {
     this.userLoggedIn= false;
+    this.userName= localStorage.getItem('name');
    }
    
 }

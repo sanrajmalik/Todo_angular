@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class TaskService {
-  public apiURL = 'http://localhost:3000'
+  public apiURL = 'http://192.168.1.17:3000'
   constructor(private httpclient:HttpClient,private dataservice:DataService,private router:Router) { }
 
   getTasks(){

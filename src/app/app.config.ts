@@ -10,7 +10,8 @@ import { tokenExpiryInterceptor } from './token-expiry.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes),provideHttpClient(),provideToastr(), provideAnimations(),
+  providers: [provideRouter(routes),provideHttpClient(),provideToastr({timeOut: 1000, preventDuplicates: true,}),
+     provideAnimations(),
     provideHttpClient(withInterceptors([
       tokenInterceptorInterceptor,tokenExpiryInterceptor
     ]))]

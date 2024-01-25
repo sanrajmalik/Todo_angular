@@ -28,9 +28,13 @@ export class LoginComponent {
       localStorage.setItem('userLoggedIn', "true");
       this.dataService.token=res.token;
       this.dataService.userLoggedIn=true;
+      this.dataService.userName=res.userName
+      localStorage.setItem('name',res.userName);
+      ;
       this.router.navigateByUrl('/dashboard');
+    this.toast.success("Login Success")
     },err=>{
-      this.toast.show("hey")
+      this.toast.error(err.error.error)
       console.log(err.message)
     })
    }
